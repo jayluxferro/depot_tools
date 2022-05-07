@@ -196,7 +196,7 @@ class DependencySettings(GClientKeywords):
     if (self._custom_vars.get('webkit_trunk', '') ==
         'svn://svn-mirror.golo.chromium.org/webkit-readonly/trunk'):
       new_url = 'svn://svn-mirror.golo.chromium.org/blink/trunk'
-      print 'Overwriting Var("webkit_trunk") with %s' % new_url
+      print('Overwriting Var("webkit_trunk") with %s' % new_url)
       self._custom_vars['webkit_trunk'] = new_url
 
     # Post process the url to remove trailing slashes.
@@ -549,7 +549,7 @@ class Dependency(gclient_utils.WorkItem, DependencySettings):
       # Eval the content.
       try:
         exec(deps_content, global_scope, local_scope)
-      except SyntaxError, e:
+      except SyntaxError as e:
         gclient_utils.SyntaxErrorToError(filepath, e)
       if use_strict:
         for key, val in local_scope.iteritems():
@@ -751,18 +751,18 @@ class Dependency(gclient_utils.WorkItem, DependencySettings):
 
               match = re.match('^Binary file ([^\0]+) matches$', line)
               if match:
-                print 'Binary file %s matches\n' % mod_path(match.group(1))
+                print('Binary file %s matches\n' % mod_path(match.group(1)))
                 return
 
               items = line.split('\0')
               if len(items) == 2 and items[1]:
-                print '%s : %s' % (mod_path(items[0]), items[1])
+                print('%s : %s' % (mod_path(items[0]), items[1]))
               elif len(items) >= 2:
                 # Multiple null bytes or a single trailing null byte indicate
                 # git is likely displaying filenames only (such as with -l)
-                print '\n'.join(mod_path(path) for path in items if path)
+                print('\n'.join(mod_path(path) for path in items if path))
               else:
-                print line
+                print(line)
           else:
             print_stdout = True
             filter_fn = None
@@ -848,7 +848,7 @@ class Dependency(gclient_utils.WorkItem, DependencySettings):
         start_time = time.time()
         gclient_utils.CheckCallAndFilterAndHeader(
             hook, cwd=self.root.root_dir, always=True)
-      except (gclient_utils.Error, subprocess2.CalledProcessError), e:
+      except (gclient_utils.Error, subprocess2.CalledProcessError) as e:
         # Use a discrete exit status code of 2 to indicate that a hook action
         # failed.  Users of this script may wish to treat hook action failures
         # differently from VC failures.
@@ -857,8 +857,8 @@ class Dependency(gclient_utils.WorkItem, DependencySettings):
       finally:
         elapsed_time = time.time() - start_time
         if elapsed_time > 10:
-          print "Hook '%s' took %.2f secs" % (
-              gclient_utils.CommandToStr(hook), elapsed_time)
+          print("Hook '%s' took %.2f secs" % (
+              gclient_utils.CommandToStr(hook), elapsed_time))
 
   def RunPreDepsHooks(self):
     assert self.processed
@@ -873,7 +873,7 @@ class Dependency(gclient_utils.WorkItem, DependencySettings):
         start_time = time.time()
         gclient_utils.CheckCallAndFilterAndHeader(
             hook, cwd=self.root.root_dir, always=True)
-      except (gclient_utils.Error, subprocess2.CalledProcessError), e:
+      except (gclient_utils.Error, subprocess2.CalledProcessError) as e:
         # Use a discrete exit status code of 2 to indicate that a hook action
         # failed.  Users of this script may wish to treat hook action failures
         # differently from VC failures.
@@ -882,8 +882,8 @@ class Dependency(gclient_utils.WorkItem, DependencySettings):
       finally:
         elapsed_time = time.time() - start_time
         if elapsed_time > 10:
-          print "Hook '%s' took %.2f secs" % (
-              gclient_utils.CommandToStr(hook), elapsed_time)
+          print("Hook '%s' took %.2f secs" % (
+              gclient_utils.CommandToStr(hook), elapsed_time))
 
 
   def subtree(self, include_all):
@@ -1107,7 +1107,7 @@ want to set 'managed': False in .gclient.
     self.config_content = content
     try:
       exec(content, config_dict)
-    except SyntaxError, e:
+    except SyntaxError as e:
       gclient_utils.SyntaxErrorToError('.gclient', e)
 
     # Append any target OS that is not already being enforced to the tuple.
@@ -1216,7 +1216,7 @@ want to set 'managed': False in .gclient.
       return {}
     try:
       exec(gclient_utils.FileRead(filename), scope)
-    except SyntaxError, e:
+    except SyntaxError as e:
       gclient_utils.SyntaxErrorToError(filename, e)
     return scope['entries']
 
@@ -1893,7 +1893,7 @@ def CMDhookinfo(parser, args):
   if not client:
     raise gclient_utils.Error('client not configured; see \'gclient config\'')
   client.RunOnDeps(None, [])
-  print '; '.join(' '.join(hook) for hook in client.GetHooks(options))
+  print('; '.join(' '.join(hook) for hook in client.GetHooks(options)))
   return 0
 
 
@@ -2001,7 +2001,7 @@ def Main(argv):
   except KeyboardInterrupt:
     gclient_utils.GClientChildren.KillAllRemainingChildren()
     raise
-  except (gclient_utils.Error, subprocess2.CalledProcessError), e:
+  except (gclient_utils.Error, subprocess2.CalledProcessError) as e:
     print >> sys.stderr, 'Error: %s' % str(e)
     return 1
   finally:
